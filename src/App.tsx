@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useBoolean } from "react-use";
+import Image from "./assets/form.jpg";
+import Input from "./components/Input";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [submitting, toggle] = useBoolean(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Stack mt={8} alignItems="center" height="100vh" spacing={4}>
+      <Typography fontSize={32} fontWeight={600}>
+        图片表单demo
+      </Typography>
+      <Box sx={{ position: "relative", maxWidth: 390, width: "100%" }}>
+        <Box
+          component="img"
+          src={Image}
+          width="100%"
+          maxWidth={500}
+          sx={{ zIndex: -1 }}
+        />
+        <Input label="A" bottom={28} right={64} />
+        <Input label="B" top={23} right={63} />
+        <Input label="C" top={124} right={147} />
+        <Input label="D" bottom={31} left={108} />
+        <Input label="E" top={66} left={10} />
+        <Input label="F" top={39} left={76} />
+        <Input label="G" top={28} left={154} />
+      </Box>
+      <Button
+        variant="contained"
+        disabled={submitting}
+        sx={{ width: 240 }}
+        onClick={() => {
+          toggle();
+          setTimeout(() => {
+            toggle();
+            enqueueSnackbar("数据已提交", { variant: "success" });
+          }, 1500);
+        }}
+      >
+        提交
+      </Button>
+    </Stack>
+  );
 }
 
-export default App
+export default App;
